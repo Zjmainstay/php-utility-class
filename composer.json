@@ -1,0 +1,26 @@
+{
+    "name": "zjmainstay/php-untility-class",
+    "description": "PHP工具类",
+    "type": "library",
+    "keywords": [
+        "php",
+        "php untility class"
+    ],
+    "homepage": "http://www.zjmainstay.cn",
+    "license": "GNU General Public License v2.0",
+    "authors": [
+        {
+            "name": "Sebastian Bergmann",
+            "email": "sebastian@phpunit.de",
+            "role": "lead"
+        }
+    ],
+    "bin": [
+        "phpunit"
+    ],
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}
