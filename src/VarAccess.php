@@ -1,4 +1,5 @@
 <?php
+namespace PhpUtility;
 /**
  * @author Zjmainstay
  * @website http://www.zjmainstay.cn

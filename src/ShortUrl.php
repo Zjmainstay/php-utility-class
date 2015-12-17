@@ -6,6 +6,8 @@
  * 获取缩短地址
  */
 
+namespace PhpUtility;
+
 class ShortUrl {
     /**
      * 获取链接缩短地址

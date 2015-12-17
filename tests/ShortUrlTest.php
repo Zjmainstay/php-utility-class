@@ -1,4 +1,5 @@
 <?php
+use PhpUtility\ShortUrl;
 /**
  * Created by PhpStorm.
  * User: zjmainstay

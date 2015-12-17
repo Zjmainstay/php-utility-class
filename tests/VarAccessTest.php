@@ -1,4 +1,5 @@
 <?php
+use PhpUtility\VarAccess;
 /**
  * 从数组中获取键值，支持特殊字符分隔的多维数组，默认键值分隔符为英文逗号
  * @param $arr 取值数组

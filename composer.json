@@ -1,10 +1,10 @@
 {
-    "name": "zjmainstay/php-untility-class",
+    "name": "zjmainstay/php-utility-class",
     "description": "PHP工具类",
     "type": "library",
     "keywords": [
         "php",
-        "php untility class"
+        "php utility class"
     ],
     "homepage": "http://www.zjmainstay.cn",
     "license": "GNU General Public License v2.0",
@@ -19,8 +19,8 @@
         "phpunit"
     ],
     "autoload": {
-        "classmap": [
-            "src/"
-        ]
+        "psr-4" : {
+            "PhpUtility\\" : "src/"
+        }
     }
 }
