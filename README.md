@@ -1,4 +1,4 @@
-# php-untility-class
+# php-utility-class
 收集PHP工具类
 
 ##VarAccess
