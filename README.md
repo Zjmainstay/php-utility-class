@@ -28,3 +28,5 @@
 ##ImageWatermark
 图像添加水印工具类，支持水印位置、水印透明度设置
 
+Demo: [watermark demo](http://demo.zjmainstay.cn/php/github/php-utility-class/demo/imageWatermark.html "watermark demo")
+
