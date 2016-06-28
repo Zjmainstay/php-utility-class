@@ -25,6 +25,6 @@
 ##ShortUrl
 利用百度短网址 http://dwz.cn 生成短地址工具类
 
-##ImageWaterMark
+##ImageWatermark
 图像添加水印工具类，支持水印位置、水印透明度设置
 
