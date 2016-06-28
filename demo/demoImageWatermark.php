@@ -7,7 +7,8 @@ $options = array(
     'WATERMARK_IMAGE'	    => 'zjmainstay.cn.watermark.png',		// The location and name of the watermark  (If using ready a ready .PNG or .GIF set WATERMARK_IS_READY to TRUE)
     'WATERMARK_OPACITY'	    => '20',			// The opacity the image will be merged with, this doesn't apply to WATERMARK_IS_READY
     'WATERMARK_PLACE'	    => 'CENTER',		// This value accepts -> BOTTOM_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, TOP_CENTER, TOP_LEFT, TOP_RIGHT, CENTER, CENTER_LEFT, CENTER_RIGHT
-    'WATERMARK_MARGIN'	    => '10',
+    'WATERMARK_MARGIN'	    => '10',            //margin
+    'WATERMARK_REPEAT'		=> false,           //repeat watermark into the full image size
 );
 
 // Overwrite Defaults
@@ -16,6 +17,7 @@ $watermarkImage		= (isset($_GET['watermark'])	? $_GET['watermark']	: $options['W
 $place				= (isset($_GET['place'])		? $_GET['place']	    : $options['WATERMARK_PLACE']);
 $margin				= (isset($_GET['margin'])		? $_GET['margin']	    : $options['WATERMARK_MARGIN']);
 $opacity        	= (isset($_GET['opacity'])  	? $_GET['opacity']      : $options['WATERMARK_OPACITY']);
+$repeat        		= (isset($_GET['repeat'])  		? $_GET['repeat']       : $options['WATERMARK_REPEAT']);
 
 $basePath = realpath(__DIR__ . '/..');
 $imagePath = realpath(__DIR__ . '/' . ltrim($image, '/'));
@@ -26,6 +28,6 @@ if((stripos($imagePath, $basePath) === false) || (stripos($watermarkImagePath, $
 
 $imageWatermark = new PhpUtility\ImageWatermark;
 
-if($imageWatermark->createImageWithWatermark($image, $watermarkImage, $place, $margin, $opacity)) {
+if($imageWatermark->createImageWithWatermark($image, $watermarkImage, $place, $margin, $opacity, $repeat)) {
 	$imageWatermark->showImageWithWatermark();
 }

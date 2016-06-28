@@ -40,37 +40,113 @@ class ImageWatermark
     protected $_watermarkImageType = null;
 
     /**
-     * 创建带水印图像
-     * @param        $imagePath
-     * @param        $watermarkImagePath
-     * @param string $placeType
-     * @param int    $margin
-     * @param int    $watermarkQuality
-     * @param int    $watermarkOpacity
+     * 水印重复到原图大小
+     * @var null
      */
-    public function createImageWithWatermark($imagePath, $watermarkImagePath, $placeType = 'CENTER', $margin = 0, $watermarkOpacity = 20) {
-        $this->_imageType = $this->getImageTypeInfo($imagePath);
-        $this->_image = $this->createImageFromFile($imagePath, $this->_imageType);
-        $this->_watermarkImageType = $this->getImageTypeInfo($watermarkImagePath);
-        $this->_watermarkImage = $this->createImageFromFile($watermarkImagePath, $this->_watermarkImageType);
+    protected $_repeatWatermarkImage = null;
+
+    /**
+     * 创建带水印图像
+     * @param        $imagePath             原图路径
+     * @param        $watermarkImagePath    水印图片路径
+     * @param string $placeType             水印位置：TOP_LEFT, TOP_CENTER, TOP_RIGHT, CENTER_LEFT, CENTER, CENTER_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
+     * @param int    $margin                边距
+     * @param int    $watermarkOpacity      水印透明度
+     * @param bool   repeatWatermark        水印重复（当水印大小小于原图大小时，通过重复得到全背景水印）
+     */
+    public function createImageWithWatermark($imagePath, $watermarkImagePath, $placeType = 'CENTER', $margin = 0, $watermarkOpacity = 20, $repeatWatermark = false) {
+        $imageInfo = $this->getImageInfo($imagePath);
+        $watermarkInfo = $this->getImageInfo($watermarkImagePath);
+
+        $this->_imageType = $imageInfo['type'];
+        $this->_image = $imageInfo['image'];
+        $this->_watermarkImageType = $watermarkInfo['type'];
+        $this->_watermarkImage = $watermarkInfo['image'];
+
         if(empty($this->_image) || empty($this->_watermarkImage)) {
             return null;
         }
-
-        $imageWidth = imagesx($this->_image);
-        $imageHeight = imagesy($this->_image);
         
-        $watermarkImageWidth = imagesx($this->_watermarkImage);
-        $watermarkImageHeight = imagesy($this->_watermarkImage);
-        
-        $positionX = $imageWidth - $watermarkImageWidth;
-        $positionY = $imageHeight - $watermarkImageHeight;
-        
-        $placeExchangeInfo = $this->getPlaceExchange($placeType, $positionX, $positionY, $margin);
-
+        //加水印图片拷贝自原图
         $this->_imageWithWatermark = $this->_image;
-        
-        return imagecopymerge($this->_imageWithWatermark, $this->_watermarkImage, $placeExchangeInfo['x'], $placeExchangeInfo['y'], 0, 0, $watermarkImageWidth, $watermarkImageHeight, $watermarkOpacity);
+
+        if($repeatWatermark) {  //水印重复（全背景水印）
+            $placeExchangeInfo = $this->getPlaceExchange($placeType, 0, 0, 0);
+            $this->repeatWatermarkImageToImageSize($imagePath, $watermarkImagePath);
+            return imagecopymerge($this->_imageWithWatermark, $this->_repeatWatermarkImage, $placeExchangeInfo['x'], $placeExchangeInfo['y'], 0, 0, $imageInfo['width'], $imageInfo['height'], $watermarkOpacity);
+        } else {    //单水印
+            $positionX = $imageInfo['width'] - $watermarkInfo['width'];
+            $positionY = $imageInfo['height'] - $watermarkInfo['height'];
+            
+            $placeExchangeInfo = $this->getPlaceExchange($placeType, $positionX, $positionY, $margin);
+            return imagecopymerge($this->_imageWithWatermark, $this->_watermarkImage, $placeExchangeInfo['x'], $placeExchangeInfo['y'], 0, 0, $watermarkInfo['width'], $watermarkInfo['height'], $watermarkOpacity);
+        }
+    }
+
+    /**
+     * 获取图片信息
+     */
+    public function getImageInfo($imagePath) {
+        $imageType      = $this->getImageTypeInfo($imagePath);
+        $image          = $this->createImageFromFile($imagePath, $imageType);
+        if(empty($image)) {
+            return false;
+        }
+        $imageWidth     = imagesx($image);
+        $imageHeight    = imagesy($image);
+
+        return [
+            'type'      => $imageType,
+            'image'     => $image,
+            'width'     => $imageWidth,
+            'height'    => $imageHeight,
+        ];
+    }
+
+    /**
+     * 重复水印得到一个与原图等大小的水印图（全背景水印）
+     */
+    public function repeatWatermarkImageToImageSize($imagePath, $watermarkImagePath) {
+        $imageInfo = $this->getImageInfo($imagePath);
+        $watermarkInfo = $this->getImageInfo($watermarkImagePath);
+
+        if(empty($imageInfo) || empty($watermarkInfo)) {
+            return false;
+        }
+
+        //创建与原图等大小的透明背景图
+        $this->_repeatWatermarkImage = $this->createTransparentImage($imageInfo['width'], $imageInfo['height']);
+
+        //逐行逐列填充水印，创造全背景水印
+        $cols = ceil($imageInfo['width'] / $watermarkInfo['width']);
+        $rows = ceil($imageInfo['height'] / $watermarkInfo['height']);
+        $res  = true;
+        for($w = 0; $w < $cols; $w++) {
+            $positionX = $w * $watermarkInfo['width'];  //x轴为按水印宽度右移的结果
+            for($h = 0; $h < $rows; $h++) {
+                $positionY = $h * $watermarkInfo['height']; //y轴为按水印高度下移的结果
+                $res = $res && imagecopymerge($this->_repeatWatermarkImage, $watermarkInfo['image'], $positionX, $positionY, 0, 0, $watermarkInfo['width'], $watermarkInfo['height'], 100);
+            }
+        }
+
+        // $this->_show($this->_repeatWatermarkImage, 'png');
+
+        return $res;
+    }
+
+    public function createTransparentImage($width, $height) {
+        //创建一个图
+        $image = imagecreatetruecolor($width, $height);
+        //创建透明背景色，主要127参数，其他可以0-255，因为任何颜色的透明都是透明
+        $transparent = imagecolorallocatealpha($image, 255, 255, 255, 127);
+        //指定颜色为透明（做了移除测试，发现没问题）
+        imagecolortransparent($image, $transparent);
+        //保留透明颜色
+        imagesavealpha($image, true);
+        //填充图片颜色
+        imagefill($image, 0, 0, $transparent);
+
+        return $image;
     }
 
     /**
