@@ -1,11 +1,11 @@
 <?php
-use PhpUtility\ImageWaterMark;
+use PhpUtility\ImageWatermark;
 /**
- * phpunit --stderr true tests/ImageWaterMarkTest.php
+ * phpunit --stderr true tests/ImageWatermarkTest.php
  */
-class ImageWaterMarkTest extends PHPUnit_Framework_TestCase {
+class ImageWatermarkTest extends PHPUnit_Framework_TestCase {
     public function setUp() {
-        $this->imageWaterMarkObj = new ImageWaterMark;
+        $this->imageWatermarkObj = new ImageWatermark;
         $this->imagePath = __DIR__ . '/../images/';
     }
 
@@ -14,7 +14,7 @@ class ImageWaterMarkTest extends PHPUnit_Framework_TestCase {
      * @dataProvider imagePathData
      */
     public function testGetImageTypeInfo($image, $imageType) {
-        $this->assertEquals($this->imageWaterMarkObj->getImageTypeInfo($this->imagePath . $image), $imageType);
+        $this->assertEquals($this->imageWatermarkObj->getImageTypeInfo($this->imagePath . $image), $imageType);
     }
 
     /**
@@ -22,27 +22,27 @@ class ImageWaterMarkTest extends PHPUnit_Framework_TestCase {
      * @dataProvider imagePathData
      */
     public function testCreateImageFromFile($image, $imageType) {
-        $this->assertEquals(gettype($this->imageWaterMarkObj->createImageFromFile($this->imagePath . $image, $imageType)), 'resource');
+        $this->assertEquals(gettype($this->imageWatermarkObj->createImageFromFile($this->imagePath . $image, $imageType)), 'resource');
     }
 
     /**
      * 测试图片创建
      * @dataProvider imagePathData
      */
-    public function testCreateImage($image, $imageType, $waterMarkImage, $waterMarkImageType) {
-        $this->assertNotEquals($this->imageWaterMarkObj->createImageWithWaterMark($this->imagePath . $image, $this->imagePath . $waterMarkImage), null);
+    public function testCreateImage($image, $imageType, $watermarkImage, $watermarkImageType) {
+        $this->assertNotEquals($this->imageWatermarkObj->createImageWithWatermark($this->imagePath . $image, $this->imagePath . $watermarkImage), null);
     }
 
     /**
      * 测试图片显示、图片存储
      * @dataProvider imagePathData
      */
-    public function testShowImage($image, $imageType, $waterMarkImage, $waterMarkImageType) {
-        $this->imageWaterMarkObj->createImageWithWaterMark($this->imagePath . $image, $this->imagePath . $waterMarkImage);
+    public function testShowImage($image, $imageType, $watermarkImage, $watermarkImageType) {
+        $this->imageWatermarkObj->createImageWithWatermark($this->imagePath . $image, $this->imagePath . $watermarkImage);
 
         #显示图片
         ob_start();
-        $this->imageWaterMarkObj->showImageWithWaterMark();
+        $this->imageWatermarkObj->showImageWithWatermark();
         $content = ob_get_contents();
         ob_end_clean();
         $this->assertNotEmpty($content);
@@ -50,7 +50,7 @@ class ImageWaterMarkTest extends PHPUnit_Framework_TestCase {
         #存储文件
         ob_start();
         $saveFile = $this->imagePath . $image . '.save';
-        $this->imageWaterMarkObj->saveImageWithWaterMark($saveFile);
+        $this->imageWatermarkObj->saveImageWithWatermark($saveFile);
         ob_end_clean();
         $this->assertTrue(file_exists($saveFile));
         unlink($saveFile);

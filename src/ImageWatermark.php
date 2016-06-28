@@ -4,9 +4,10 @@ namespace PhpUtility;
  * @author Zjmainstay
  * @website http://www.zjmainstay.cn
  * @year 2016
+ * @baseOn https://github.com/andreCatita/imageWatermark
  * 图像水印生成类
  */
-class ImageWaterMark
+class ImageWatermark
 {
     /**
      * 原图图像资源
@@ -18,13 +19,13 @@ class ImageWaterMark
      * 水印图像资源
      * @var null
      */
-    protected $_waterMarkImage = null;
+    protected $_watermarkImage = null;
 
     /**
      * 加水印图像资源
      * @var null
      */
-    protected $_imageWithWaterMark = null;
+    protected $_imageWithWatermark = null;
 
     /**
      * 原图图片类型（jpeg/png/gif）
@@ -36,40 +37,40 @@ class ImageWaterMark
      * 水印图片类型
      * @var null
      */
-    protected $_waterMarkImageType = null;
+    protected $_watermarkImageType = null;
 
     /**
      * 创建带水印图像
      * @param        $imagePath
-     * @param        $waterMarkImagePath
+     * @param        $watermarkImagePath
      * @param string $placeType
      * @param int    $margin
-     * @param int    $waterMarkQuality
-     * @param int    $waterMarkOpacity
+     * @param int    $watermarkQuality
+     * @param int    $watermarkOpacity
      */
-    public function createImageWithWaterMark($imagePath, $waterMarkImagePath, $placeType = 'CENTER', $margin = 0, $waterMarkOpacity = 20) {
+    public function createImageWithWatermark($imagePath, $watermarkImagePath, $placeType = 'CENTER', $margin = 0, $watermarkOpacity = 20) {
         $this->_imageType = $this->getImageTypeInfo($imagePath);
         $this->_image = $this->createImageFromFile($imagePath, $this->_imageType);
-        $this->_waterMarkImageType = $this->getImageTypeInfo($waterMarkImagePath);
-        $this->_waterMarkImage = $this->createImageFromFile($waterMarkImagePath, $this->_waterMarkImageType);
-        if(empty($this->_image) || empty($this->_waterMarkImage)) {
+        $this->_watermarkImageType = $this->getImageTypeInfo($watermarkImagePath);
+        $this->_watermarkImage = $this->createImageFromFile($watermarkImagePath, $this->_watermarkImageType);
+        if(empty($this->_image) || empty($this->_watermarkImage)) {
             return null;
         }
 
         $imageWidth = imagesx($this->_image);
         $imageHeight = imagesy($this->_image);
         
-        $waterMarkImageWidth = imagesx($this->_waterMarkImage);
-        $waterMarkImageHeight = imagesy($this->_waterMarkImage);
+        $watermarkImageWidth = imagesx($this->_watermarkImage);
+        $watermarkImageHeight = imagesy($this->_watermarkImage);
         
-        $positionX = $imageWidth - $waterMarkImageWidth;
-        $positionY = $imageHeight - $waterMarkImageHeight;
+        $positionX = $imageWidth - $watermarkImageWidth;
+        $positionY = $imageHeight - $watermarkImageHeight;
         
         $placeExchangeInfo = $this->getPlaceExchange($placeType, $positionX, $positionY, $margin);
 
-        $this->_imageWithWaterMark = $this->_image;
+        $this->_imageWithWatermark = $this->_image;
         
-        return imagecopymerge($this->_imageWithWaterMark, $this->_waterMarkImage, $placeExchangeInfo['x'], $placeExchangeInfo['y'], 0, 0, $waterMarkImageWidth, $waterMarkImageHeight, $waterMarkOpacity);
+        return imagecopymerge($this->_imageWithWatermark, $this->_watermarkImage, $placeExchangeInfo['x'], $placeExchangeInfo['y'], 0, 0, $watermarkImageWidth, $watermarkImageHeight, $watermarkOpacity);
     }
 
     /**
@@ -180,19 +181,19 @@ class ImageWaterMark
     /**
      * 显示水印
      */
-    public function showWaterMarkImage() {
-        $this->_show($this->_waterMarkImage, $this->_waterMarkImageType);
+    public function showWatermarkImage() {
+        $this->_show($this->_watermarkImage, $this->_watermarkImageType);
     }
 
     /**
      * 显示加水印图片
      */
-    public function showImageWithWaterMark() {
-        $this->_show($this->_imageWithWaterMark, $this->_imageType);
+    public function showImageWithWatermark() {
+        $this->_show($this->_imageWithWatermark, $this->_imageType);
     }
     
-    public function saveImageWithWaterMark($filePath) {
-        $this->_show($this->_imageWithWaterMark, $this->_imageType, $filePath);
+    public function saveImageWithWatermark($filePath) {
+        $this->_show($this->_imageWithWatermark, $this->_imageType, $filePath);
     }
 
     /**
@@ -213,7 +214,7 @@ class ImageWaterMark
      */
     public function __destruct() {
         (gettype($this->_image) == 'resource') && imagedestroy($this->_image);
-        (gettype($this->_waterMarkImage) == 'resource') && imagedestroy($this->_waterMarkImage);
-        (gettype($this->_imageWithWaterMark) == 'resource') && imagedestroy($this->_imageWithWaterMark);
+        (gettype($this->_watermarkImage) == 'resource') && imagedestroy($this->_watermarkImage);
+        (gettype($this->_imageWithWatermark) == 'resource') && imagedestroy($this->_imageWithWatermark);
     }
 }

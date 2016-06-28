@@ -19,7 +19,7 @@ class ShortUrl {
     }
 
     /**
-     * 百度短短链接 http://dwz.cn
+     * 百度短网址 http://dwz.cn
      * @param $url
      * @return mixed
      */

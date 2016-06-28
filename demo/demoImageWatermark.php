@@ -24,8 +24,8 @@ if((stripos($imagePath, $basePath) === false) || (stripos($watermarkImagePath, $
     exit('Deny');
 }
 
-$imageWatermark = new PhpUtility\ImageWaterMark;
+$imageWatermark = new PhpUtility\ImageWatermark;
 
-if($imageWatermark->createImageWithWaterMark($image, $watermarkImage, $place, $margin, $opacity)) {
-	$imageWatermark->showImageWithWaterMark();
+if($imageWatermark->createImageWithWatermark($image, $watermarkImage, $place, $margin, $opacity)) {
+	$imageWatermark->showImageWithWatermark();
 }
