@@ -124,19 +124,19 @@ class ImageWaterMark
     public function getPlaceExchange($type, $positionX, $positionY, $margin) {
         $placeExchangeMap = [
             'TOP_LEFT'      => [
-                'x' => ($positionX + $margin),
-                'y' => ($positionY + $margin), 
+                'x' => (0 + $margin),
+                'y' => (0 + $margin), 
             ],
             'TOP_CENTER'    => [
                 'x' => floor($positionX / 2),
-                'y' => ($positionY + $margin), 
+                'y' => (0 + $margin), 
             ],
             'TOP_RIGHT'     => [
                 'x' => ($positionX - $margin),
-                'y' => ($positionY + $margin), 
+                'y' => (0 + $margin), 
             ],
             'CENTER_LEFT'   => [
-                'x' => ($positionX + $margin),
+                'x' => (0 + $margin),
                 'y' => floor($positionY / 2), 
             ],
             'CENTER'        => [
@@ -148,11 +148,11 @@ class ImageWaterMark
                 'y' => floor($positionY / 2), 
             ],
             'BOTTOM_LEFT'   => [
-                'x' => ($positionX + $margin),
+                'x' => (0 + $margin),
                 'y' => ($positionY - $margin), 
             ],
             'BOTTOM_CENTER' => [
-                'x' => floor($positionX + $margin),
+                'x' => floor($positionX / 2),
                 'y' => ($positionY - $margin), 
             ],
             'BOTTOM_RIGHT'  => [
