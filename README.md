@@ -30,3 +30,7 @@
 
 Demo: [watermark demo](http://demo.zjmainstay.cn/php/github/php-utility-class/demo/imageWatermark.html "watermark demo")
 
+##CurlAutoLogin
+利用curl信息自动解析实现模拟登录
+
+Demo: [CurlAutoLogin demo](http://demo.zjmainstay.cn/php/github/php-utility-class/demo/curlAutoLoginDemoCanRun.php "curl auto login demo")
