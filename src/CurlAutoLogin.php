@@ -150,6 +150,14 @@ class CurlAutoLogin {
     }
 
     /**
+     * 获取cookie内容
+     * @return string
+     */
+    public function getCookieContent() {
+        return file_get_contents($this->getLastCookieFile());
+    }
+
+    /**
      * 设置上一次存储cookie的文件
      * @param [type] $cookieFile [description]
      */
@@ -249,8 +257,8 @@ class CurlAutoLogin {
         curl_setopt($ch,CURLOPT_COOKIEFILE, $this->lastCookieFile); //使用提交后得到的cookie数据
 
         //add post data support
+        curl_setopt($ch,CURLOPT_POST, 1);
         if(!empty($postData)) {
-            curl_setopt($ch,CURLOPT_POST, 1);
             curl_setopt($ch,CURLOPT_POSTFIELDS, $postData);
         }
 
