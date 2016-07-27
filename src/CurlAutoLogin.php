@@ -9,6 +9,13 @@ namespace PhpUtility;
  *
  * 利用curl信息自动解析实现模拟登录
  */
+/**
+ * class CurlAutoLogin
+ * @author Zjmainstay
+ * @website http://www.zjmainstay.cn
+ *
+ * 利用curl信息自动解析实现模拟登录
+ */
 class CurlAutoLogin {
     //最后一次cookie存储文件
     protected $lastCookieFile = '';
@@ -65,6 +72,7 @@ class CurlAutoLogin {
             'url'       => $matchUrl[1],
             'header'    => $httpHeader,
             'post'      => $postData,
+            'opt'       => [],         //扩展opt，在callbackBefore里添加
         ];
     }
 
@@ -85,7 +93,7 @@ class CurlAutoLogin {
 
         //add header
         if(!empty($parseCurlResult['header'])) {
-            $this->curl->opt[CURLOPT_HTTPHEADER] = $parseCurlResult['header'];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $parseCurlResult['header']);
         }
 
         //add ssl support
@@ -111,6 +119,13 @@ class CurlAutoLogin {
         if(!empty($parseCurlResult['post'])) {
             curl_setopt($ch,CURLOPT_POST, 1);
             curl_setopt($ch,CURLOPT_POSTFIELDS, $parseCurlResult['post']);
+        }
+
+        //extend opt
+        if(!empty($parseCurlResult['opt'])) {
+            foreach ($parseCurlResult['opt'] as $key => $value) {
+                curl_setopt($ch,$key, $value);
+            }
         }
 
         try {
@@ -197,7 +212,7 @@ class CurlAutoLogin {
 
         //add header
         if(!empty($header)) {
-            $this->curl->opt[CURLOPT_HTTPHEADER] = $header;
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         }
 
         //add ssl support
@@ -242,7 +257,7 @@ class CurlAutoLogin {
 
         //add header
         if(!empty($header)) {
-            $this->curl->opt[CURLOPT_HTTPHEADER] = $header;
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         }
 
         //add ssl support
