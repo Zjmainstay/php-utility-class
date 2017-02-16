@@ -172,11 +172,15 @@ class CurlAutoLogin {
         return file_get_contents($this->getLastCookieFile());
     }
 
+    public function getLastCookieContent() {
+        return file_get_contents($this->getLastCookieFile());
+    }
+
     /**
      * 设置上一次存储cookie的文件
      * @param [type] $cookieFile [description]
      */
-    protected function setLastCookieFile($cookieFile) {
+    public function setLastCookieFile($cookieFile) {
         if(!$this->lockedLastCookieFile) {
             $this->lastCookieFile = $cookieFile;
         }
@@ -291,5 +295,18 @@ class CurlAutoLogin {
         curl_close($ch);
 
         return $content;
+    }
+
+    /**
+     * 断言内容中包含某个字符
+     * @param $content 内容
+     * @param $substr 包含字符串
+     */
+    public function assertContainStr($content, $substr) {
+        if(false !== stripos($content, $substr)) {
+            return true;
+        }
+
+        return false;
     }
 }
