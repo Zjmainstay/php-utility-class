@@ -40,12 +40,17 @@ class Base64Pad
         $jsonLen = strlen($jsonStr);
 
         if( $jsonLen % 3 != 0) {
-            $autoPadLen = 3 - ($jsonLen + 11) % 3;
-            $arr['_pad_'] = str_repeat('_', $autoPadLen);    //"_pad_":"" 填充字段长度为11，让 ( strlen($jsonStr) + 11 ) % 3 == 0
+            //加入填充数组
+            $arr['_pad_'] = '';
+            $jsonLen = strlen(json_encode($arr));
+
+            //补齐缺失长度
+            $autoPadLen = 3 - ($jsonLen % 3);
+            $arr['_pad_'] = str_repeat('_', $autoPadLen);
             $jsonStr = json_encode($arr);
         }
 
-        // echo "jsonOrig: " . $jsonOrig .  ", len: " . strlen($jsonOrig) ."\njsonFix : " . $jsonStr . ", len: " . strlen($jsonStr) ."\nbase64Orig: " . base64_encode($jsonOrig) . "\nbase64Fix : " . base64_encode($jsonStr). "\n\n";
+        echo "jsonOrig: " . $jsonOrig .  ", len: " . strlen($jsonOrig) ."\njsonFix : " . $jsonStr . ", len: " . strlen($jsonStr) ."\nbase64Orig: " . base64_encode($jsonOrig) . "\nbase64Fix : " . base64_encode($jsonStr). "\n\n";
 
         return base64_encode($jsonStr);
     }
