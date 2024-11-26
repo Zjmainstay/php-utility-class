@@ -6,7 +6,7 @@ namespace PhpUtility;
  * @year 2020
  * 自动补位去除数组base64产生的末尾等号
  */
-class Base64Pad
+class Base64Fix
 {
     /**
      * 自动修复数组的base64末尾填充
@@ -14,10 +14,10 @@ class Base64Pad
      * @return string
      * 
      * for($i = 1; $i <= 3; $i++) {
-     *     Base64Pad::autoFixArrayBase64Pad(['name' => str_repeat('a', $i)]);
+     *     Base64Fix::autoFixArrayBase64Pad(['name' => str_repeat('a', $i)]);
      * }
      * for($i = 1; $i <= 3; $i++) {
-     *     Base64Pad::autoFixArrayBase64Pad([str_repeat('a', $i)]);
+     *     Base64Fix::autoFixArrayBase64Pad([str_repeat('a', $i)]);
      * }
      *
      * 效果示例：
@@ -72,3 +72,6 @@ class Base64Pad
         return base64_encode($jsonStr);
     }
 }
+
+//修复文件名与类名不同问题（兼容旧类名）
+class Base64Pad extends Base64Fix {}
