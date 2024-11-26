@@ -38,4 +38,6 @@ Demo: [CurlAutoLogin demo](http://demo.zjmainstay.cn/php/github/php-utility-clas
 ## Base64Fix
 通过数组补位，去除base64产生的末尾等号
 
+## JsonFix
+自动修复JSON字符串内的双引号转义
 
